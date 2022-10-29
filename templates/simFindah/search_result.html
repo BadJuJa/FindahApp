@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ru" class="h-100">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <title>FINDAH BOOK O' YA</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css">
+
+</head>
+<body class="d-flex flex-column h-100">
+<main class="flex-shrink-0">
+    <div class="container">
+        <div class="row">
+            <div class="col-4 offset-2">
+                <form method="post" action="{% url 'search-result' %}">
+                    {% csrf_token %}
+
+                    <label for="user-desc">Описание</label>
+                    <input class="form-control" type="text" id="user-desc" name = "searched" placeholder="Ваше описание">
+                    <input type="submit" name="send" value="Найти" class="btn btn-success">
+                </form>
+            </div>
+            <div class="col-4 offset-1">
+                <h1>Ваше описание</h1>
+                <div class="text">
+                    {% if searched %}
+                        <p>{{ searched }}</p>
+                    {% endif %}
+                <h1>Похожие книги</h1>
+                {% for book in books %}
+                        <p><a href="{{ book.first.link }}">{{ book.first.title }}</a></p>
+                    {% endfor %}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>
