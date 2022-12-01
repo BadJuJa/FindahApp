@@ -1,6 +1,5 @@
-from operator import ge
-from pkg_resources import yield_lines
 import scrapy
+import parse_settings
 
 
 class BasicSpider(scrapy.Spider):
@@ -8,7 +7,7 @@ class BasicSpider(scrapy.Spider):
     allowed_domains = ['book24.ru']
     start_urls = ['https://book24.ru/']
 
-    genre_list = {
+    genre_dict = {
         "detectives": ["detektivy-1594", 361],
         "fiction": ["fantastika-1649", 217],
         "horrors": ["uzhasy-i-mistika-2054", 31],
@@ -17,10 +16,12 @@ class BasicSpider(scrapy.Spider):
         "action": ["boeviki-trillery-1715", 88]
     }
 
+    genre_list = [genre.lower() for genre in parse_settings.GENRES]
+
     def start_requests(self):
         for genre in self.genre_list:
-            link = self.genre_list[genre][0]
-            pages = self.genre_list[genre][1]
+            link = self.genre_dict[genre][0]
+            pages = self.genre_dict[genre][1]
             for page in range(1, 1 + pages):
                 url = f'https://book24.ru/catalog/{link}/page-{page}/'
                 yield scrapy.Request(url, callback=self.parse_pages)
